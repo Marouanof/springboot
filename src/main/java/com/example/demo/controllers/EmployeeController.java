@@ -1,6 +1,8 @@
 package com.example.demo.controllers;
 
 import com.example.demo.abstracts.EmployeeService;
+import com.example.demo.dtos.EmployeeCreate;
+import com.example.demo.dtos.EmployeeUpdate;
 import com.example.demo.entities.Employee;
 import com.example.demo.shared.CustomResponseException;
 import com.example.demo.shared.GlobalResponse;
@@ -33,7 +35,7 @@ public class EmployeeController {
         return new ResponseEntity<GlobalResponse<Employee>>(new GlobalResponse<>(employee),HttpStatus.OK);
     }
     @PostMapping
-    public ResponseEntity<GlobalResponse<Employee>> createOne(@RequestBody @Valid Employee employee){
+    public ResponseEntity<GlobalResponse<Employee>> createOne(@RequestBody @Valid EmployeeCreate employee){
         Employee employeeCreated = employeeService.createOne(employee);
         return new ResponseEntity<>(new GlobalResponse<>(employeeCreated),HttpStatus.CREATED);
     }
@@ -43,7 +45,7 @@ public class EmployeeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     @PutMapping("/{employeeId}")
-    public ResponseEntity<GlobalResponse<Employee>> updateONe(@PathVariable UUID employeeId,@RequestBody @Valid Employee employee){
+    public ResponseEntity<GlobalResponse<Employee>> updateONe(@PathVariable UUID employeeId,@RequestBody @Valid EmployeeUpdate employee){
         Employee existingEmployee = employeeService.updateOne(employeeId, employee);
         return new ResponseEntity<>(new GlobalResponse<>(existingEmployee),HttpStatus.OK);
     }
