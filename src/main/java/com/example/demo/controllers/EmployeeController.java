@@ -25,8 +25,8 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
     @GetMapping
-    public ResponseEntity<GlobalResponse<ArrayList<Employee>>> findAll(){
-        ArrayList<Employee> employees = employeeService.findAll();
+    public ResponseEntity<GlobalResponse<List<Employee>>> findAll(){
+        List<Employee> employees = employeeService.findAll();
         return new ResponseEntity<>(new GlobalResponse<>(employees), HttpStatus.OK);
     }
     @GetMapping("/{employeeId}")
