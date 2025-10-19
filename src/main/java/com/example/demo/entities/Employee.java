@@ -33,6 +33,11 @@ public class Employee {
     private LocalDate hireDate;
     @Column(name= "position", nullable = false)
     private String position;
-    @Column(name= "department_id", nullable = false)
-    private UUID departmentId = UUID.randomUUID();
+    @ManyToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(name="department_id",  nullable = false)
+    private Department department;
+
+    public UUID getDepartment() {
+        return department.getId();
+    }
 }

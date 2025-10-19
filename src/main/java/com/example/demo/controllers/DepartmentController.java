@@ -40,8 +40,7 @@ public class DepartmentController {
     }
     @PutMapping("/{departmentId}")
     public ResponseEntity<GlobalResponse<Department>> updateOne(@PathVariable UUID departmentId, @RequestBody @Valid DepartmentUpdate department) {
-        Department existingDepartment = departmentService.findOne(departmentId);
-        existingDepartment.setName(department.name());
-        return new ResponseEntity<>(new GlobalResponse<>(existingDepartment),HttpStatus.OK);
+        Department department1 = departmentService.updateOne(departmentId,department);
+        return new ResponseEntity<>(new GlobalResponse<>(department1),HttpStatus.OK);
     }
 }

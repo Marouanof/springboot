@@ -3,7 +3,9 @@ package com.example.demo.Services;
 import com.example.demo.abstracts.EmployeeService;
 import com.example.demo.dtos.EmployeeCreate;
 import com.example.demo.dtos.EmployeeUpdate;
+import com.example.demo.entities.Department;
 import com.example.demo.entities.Employee;
+import com.example.demo.repositories.DepartmentRepo;
 import com.example.demo.repositories.EmployeeRepo;
 import com.example.demo.shared.CustomResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import java.util.UUID;
 public class EmployeeServiceImp implements EmployeeService {
     @Autowired
     private EmployeeRepo employeeRepo;
+    @Autowired
+    private DepartmentRepo departmentRepo;
     @Override
     public Employee findOne(UUID employeeId) {
         Employee employee = employeeRepo.findById(employeeId)
@@ -42,19 +46,21 @@ public class EmployeeServiceImp implements EmployeeService {
         existingEmployee.setLastname(employee.lastname());
         existingEmployee.setPhoneNumber(employee.phoneNumber());
         existingEmployee.setPosition(employee.position());
-        existingEmployee.setDepartmentId(existingEmployee.getDepartmentId());
         employeeRepo.save(existingEmployee);
         return existingEmployee;
     }
     @Override
     public Employee createOne(EmployeeCreate employeeCreate) {
         Employee employee = new Employee();
+        Department department = departmentRepo.findById(employeeCreate.department_id())
+                .orElseThrow(()->CustomResponseException.ResourceNotFound("Department with id "+ employeeCreate.department_id() +" not found."));
         employee.setFirstname(employeeCreate.firstname());
         employee.setLastname(employeeCreate.lastname());
         employee.setEmail(employeeCreate.email());
         employee.setPhoneNumber(employeeCreate.phoneNumber());
         employee.setPosition(employeeCreate.position());
         employee.setHireDate(employeeCreate.hireDate());
+        employee.setDepartment(department);
         employeeRepo.save(employee);
         return employee;
     }

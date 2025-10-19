@@ -21,5 +21,7 @@ public record EmployeeCreate (
     @PastOrPresent(message="hireDate can't be in the future")
     LocalDate hireDate,
     @NotNull(message="position is required")
-    String position
+    String position,
+    @NotNull(message="department id is required")
+    UUID department_id
 ){}
