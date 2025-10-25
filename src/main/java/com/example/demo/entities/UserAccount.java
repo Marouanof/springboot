@@ -6,7 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -15,7 +19,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserAccount {
+public class UserAccount implements UserDetails {
     @Id
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
@@ -29,4 +33,9 @@ public class UserAccount {
     @OneToOne(fetch=FetchType.LAZY,optional = false)
     @JoinColumn(name="employee_id", nullable=false, unique=true)
     private Employee employee;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
 }

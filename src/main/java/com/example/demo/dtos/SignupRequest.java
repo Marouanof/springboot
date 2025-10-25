@@ -4,6 +4,8 @@ import com.example.demo.entities.Employee;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.UUID;
+
 public record SignupRequest (
         @NotNull(message="username is required")
         @Size(min=2,max=50,message = "min is 2 char max is 50")
@@ -12,5 +14,5 @@ public record SignupRequest (
         @Size(min=2,max=50,message = "min is 2 char max is 50")
         String password,
         @NotNull(message="employee id is required")
-        String employeeId
+        UUID employeeId
 ){}
