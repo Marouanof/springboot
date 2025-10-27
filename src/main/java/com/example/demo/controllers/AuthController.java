@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.Services.AuthService;
+import com.example.demo.dtos.LoginRequest;
 import com.example.demo.dtos.SignupRequest;
 import com.example.demo.shared.GlobalResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,5 +21,10 @@ public class AuthController {
     public ResponseEntity<GlobalResponse<String>> signup(@RequestBody SignupRequest signupRequest) {
         authService.signup(signupRequest);
         return new ResponseEntity<>(new GlobalResponse<>("Signup Successful"), HttpStatus.CREATED);
+    }
+    @PostMapping("/login")
+    public ResponseEntity<GlobalResponse<String>> login(@RequestBody LoginRequest loginRequest) {
+        String token = authService.login(loginRequest);
+        return new ResponseEntity<>(new GlobalResponse<>(token), HttpStatus.CREATED);
     }
 }

@@ -8,10 +8,10 @@ import com.example.demo.entities.Employee;
 import com.example.demo.repositories.DepartmentRepo;
 import com.example.demo.repositories.EmployeeRepo;
 import com.example.demo.shared.CustomResponseException;
+import com.example.demo.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,7 +21,10 @@ public class EmployeeServiceImp implements EmployeeService {
     private EmployeeRepo employeeRepo;
     @Autowired
     private DepartmentRepo departmentRepo;
+    @Autowired
+    private SecurityUtils securityUtils;
     @Override
+    @PreAuthorize("@securityUtils.isOwner(#employeeId)")
     public Employee findOne(UUID employeeId) {
         Employee employee = employeeRepo.findById(employeeId)
                 .orElseThrow(()-> CustomResponseException.ResourceNotFound("Employee with id "+ employeeId +" not found."));
@@ -39,6 +42,7 @@ public class EmployeeServiceImp implements EmployeeService {
         }
     }
     @Override
+    @PreAuthorize("@securityUtils.isOwner(#employeeId)")
     public Employee updateOne(UUID employeeId, EmployeeUpdate employee) {
         Employee existingEmployee = employeeRepo.findById(employeeId)
                 .orElseThrow(()->CustomResponseException.ResourceNotFound("Employee with id "+ employeeId +" not found."));

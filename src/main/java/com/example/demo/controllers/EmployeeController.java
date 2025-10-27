@@ -48,7 +48,7 @@ public class EmployeeController {
         Employee existingEmployee = employeeService.updateOne(employeeId, employee);
         return new ResponseEntity<>(new GlobalResponse<>(existingEmployee),HttpStatus.OK);
     }
-    @PostMapping("/{employeeId}/leave-request")
+    @PostMapping("/{employeeId}/leave-requests")
     public ResponseEntity<GlobalResponse<LeaveRequest>> leaveRequest(@RequestBody @Valid LeaveRequestCreate leaveRequestCreate, @PathVariable UUID employeeId){
         LeaveRequest newLeaveRequest = leaveRequestService.createOne(leaveRequestCreate,employeeId);
         return new ResponseEntity<>(new GlobalResponse<>(newLeaveRequest),HttpStatus.CREATED);

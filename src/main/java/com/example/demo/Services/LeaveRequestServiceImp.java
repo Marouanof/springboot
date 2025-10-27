@@ -1,6 +1,7 @@
 package com.example.demo.Services;
 
 import com.example.demo.abstracts.LeaveRequestService;
+import com.example.demo.dtos.EmployeeUpdate;
 import com.example.demo.dtos.LeaveRequestCreate;
 import com.example.demo.entities.Employee;
 import com.example.demo.entities.LeaveRequest;
@@ -8,6 +9,7 @@ import com.example.demo.repositories.EmployeeRepo;
 import com.example.demo.repositories.LeaveRequestRepo;
 import com.example.demo.shared.CustomResponseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +24,18 @@ public class LeaveRequestServiceImp implements LeaveRequestService {
     public List<LeaveRequest> findAll(UUID id) {
         return leaveRequestRepo.findAllByEmployeeId(id);
     }
-
-    @Override
+    
+    @PreAuthorize("@securityUtils.isOwner(#employeeId)")
+    public Employee updateOne(UUID employeeId, EmployeeUpdate employee) {
+        Employee existingEmployee = employeeRepo.findById(employeeId)
+                .orElseThrow(()->CustomResponseException.ResourceNotFound("Employee with id "+ employeeId +" not found."));
+        existingEmployee.setFirstname(employee.firstname());
+        existingEmployee.setLastname(employee.lastname());
+        existingEmployee.setPhoneNumber(employee.phoneNumber());
+        existingEmployee.setPosition(employee.position());
+        employeeRepo.save(existingEmployee);
+        return existingEmployee;
+    }
     public LeaveRequest createOne(LeaveRequestCreate leaveRequest, UUID employeeId) {
         Employee existingEmployee = employeeRepo.findById(employeeId)
                 .orElseThrow(()-> CustomResponseException.ResourceNotFound("Employee with id "+ employeeId +" not found."));
